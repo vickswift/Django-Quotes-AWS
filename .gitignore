@@ -1,6 +1,5 @@
 *.pyc
 djangoEnv/
 venv/
-py27/
-*.sqlite3
+
 
