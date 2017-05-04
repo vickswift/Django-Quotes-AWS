@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Quotes</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+        <h5 style="text-align: right"><a href="/logout">Logout</a></h5>
+        <h5>Successfully logged in! Welcome, <b>{{user.alias}} !</b></h5>
+        <h4>Your Favourite</h4>
+        <table>
+            <tbody>
+                <!-- {if not quote}
+                <tr>
+                    <td>{quote} </td>
+                </tr>
+                {else} -->
+                    {%for favourite in favourites%}
+                        <!-- {if quote != user} -->
+                <tr>
+                    <td>{{favourite.content}} </td>
+                </tr>
+                <tr>
+                    <td>Post By: <a href="/show/{{favourite.id}}">{{favourite.contributor.name}}</a> | <a href="/removefav/{{favourite.id}}">Remove Favourite</a></td>
+                </tr>
+                    <!-- {endif} -->
+                    {%endfor%}
+            <!-- {endif} -->
+            </tbody>
+        </table>
+    </div>
+        <br>
+
+    <div class="container">
+        <h4>Quotable Quotes</h4>
+        <table>
+            <tbody>
+                {%for quote in quotes%}
+                    <tr><td><b>{{quote.quoteby}}:</b> {{quote.content}}</td></tr>
+                    <tr>
+                        <td>
+                        Posted By<a href="/show/{{quote.id}}">:{{quote.contributor.name}}</a>
+                        </td>
+                        <form class="" action="/addfav/{{quote.id}}" method="POST">
+                            {% csrf_token %}
+                           <td><input type="Submit" name="add" value="Add My List"></td>
+                       </form>
+                   </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <div class="container">
+        <br />
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+            <li style="color:red">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+    </div>
+    <div class="row">
+        <form action="/createquote" class="col s12" method="POST">
+            <div class="">
+                {% csrf_token %}
+                <h3>Contribute a Quote</h3>
+                <label for="input1">Quoted By:</label>
+                <input type="text" name="quoteby" class="materialize-textarea" placeholder="Quoted by"></input>
+                <label for="textarea2">Message:</label>
+                <textarea name="content" class="materialize-textarea" placeholder="Quote"></textarea>
+                <input type="submit" name="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    <br>
+  </body>
+</html>
